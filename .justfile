@@ -3,8 +3,8 @@
 set quiet := true
 set shell := ['bash', '-euo', 'pipefail', '-c']
 
-[doc('Bootstrap Recipes')]
 mod bootstrap '.just/bootstrap.just'
+mod kube '.just/kubernetes.just'
 
 [private]
 default:
