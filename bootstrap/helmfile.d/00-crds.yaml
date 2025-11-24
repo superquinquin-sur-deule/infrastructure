@@ -1,0 +1,31 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/helmfile
+
+# This helmfile is for installing Custom Resource Definitions (CRDs) from Helm charts.
+# It is not intended to be used with helmfile apply or sync.
+
+helmDefaults:
+  args:
+    - --include-crds
+    - --no-hooks
+
+releases:
+  - name: cloudflare-dns
+    namespace: network
+    chart: oci://ghcr.io/home-operations/charts-mirror/external-dns
+    version: 1.19.0
+
+  - name: external-secrets
+    namespace: external-secrets
+    chart: oci://ghcr.io/external-secrets/charts/external-secrets
+    version: 1.1.0
+
+  - name: gateway-api-crds
+    namespace: kube-system
+    chart: oci://ghcr.io/wiremind/wiremind-helm-charts/gateway-api-crds
+    version: 1.4.0
+
+  - name: kube-prometheus-stack
+    namespace: observability
+    chart: oci://ghcr.io/prometheus-community/charts/kube-prometheus-stack
+    version: 79.7.1
