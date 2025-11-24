@@ -8,6 +8,14 @@ kubernetes_dir := justfile_dir() + '/kubernetes'
 default:
     just --list bootsrap
 
+
+[doc('Apply Kubernetes resources')]
+resources:
+    just log info "Running stage..." "stage" "$0"
+    if ! just template "{{ bootstrap_dir }}/resources.yaml.j2" | kubectl apply --server-side --field-manager bootstrap --force-conflicts -f -; then \
+        just log fatal "Failed to apply resources" "stage" "$0"; \
+    fi;
+
 [doc('Apply CRDs')]
 crds: (with-banner "Applying CRDs")
     if ! crds=$(helmfile --file "{{bootstrap_dir}}/helmfile.d/00-crds.yaml" template -q | yq ea -e 'select(.kind == "CustomResourceDefinition")') || [[ -z "${crds}" ]]; then \
