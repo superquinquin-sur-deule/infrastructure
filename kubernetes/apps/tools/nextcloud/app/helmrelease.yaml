@@ -1,0 +1,28 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: nextcloud
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: nextcloud
+  interval: 1h
+  values:
+    internalDatabase:
+      enabled: false
+    externalDatabase:
+      enabled: true
+      type: postgresql
+      host: shared-cluster-primary.database.svc
+      existingSecret:
+        enabled: true
+        secretName: shared-cluster-pguser-nextcloud
+        usernameKey: user
+        passwordKey: password
+        databaseKey: dbname
+    persistence:
+      enabled: true
+      existingClaim: nextcloud-data
+    ingress:
+      enabled: false

@@ -1,0 +1,10 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: pgo
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: pgo
+  interval: 1h

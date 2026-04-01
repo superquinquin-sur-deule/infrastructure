@@ -1,0 +1,42 @@
+---
+apiVersion: postgres-operator.crunchydata.com/v1beta1
+kind: PostgresCluster
+metadata:
+  name: shared-cluster
+spec:
+  postgresVersion: 17
+  instances:
+    - name: instance1
+      replicas: 3
+      dataVolumeClaimSpec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 10Gi
+  users:
+    - name: nextcloud
+      databases:
+        - nextcloud
+    - name: mattermost
+      databases:
+        - mattermost
+  backups:
+    pgbackrest:
+      configuration:
+        - secret:
+            name: s3-credentials
+      global:
+        repo1-path: /pgbackrest/shared-cluster/repo1
+        repo1-s3-uri-style: path
+        repo1-retention-full: "4"
+        repo1-retention-full-type: count
+      repos:
+        - name: repo1
+          s3:
+            bucket: "${S3_BUCKET}"
+            endpoint: "${S3_ENDPOINT}"
+            region: "${S3_REGION}"
+          schedules:
+            full: "0 2 * * 0"
+            differential: "0 2 * * 1-6"

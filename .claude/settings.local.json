@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git ls-tree:*)",
+      "Bash(git -C /home/lucas/projects/superquinquin-sur-deule-gitops ls-tree -r HEAD --name-only)",
+      "Bash(kustomize build:*)",
+      "Bash(terraform init:*)",
+      "Bash(terraform validate:*)"
+    ]
+  }
+}
